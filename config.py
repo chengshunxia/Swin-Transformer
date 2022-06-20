@@ -8,6 +8,7 @@
 import os
 import yaml
 from yacs.config import CfgNode as CN
+from ipu import update_ipu_config
 
 _C = CN()
 
@@ -235,7 +236,6 @@ _C.THROUGHPUT_MODE = False
 # local rank for DistributedDataParallel, given by command line argument
 _C.LOCAL_RANK = 0
 
-
 def _update_config_from_file(config, cfg_file):
     config.defrost()
     with open(cfg_file, 'r') as f:
@@ -257,7 +257,6 @@ def update_config(config, args):
     config.defrost()
     if args.opts:
         config.merge_from_list(args.opts)
-
     # merge from specific arguments
     if args.batch_size:
         config.DATA.BATCH_SIZE = args.batch_size
@@ -291,7 +290,7 @@ def update_config(config, args):
         config.THROUGHPUT_MODE = True
 
     # set local rank for distributed training
-    config.LOCAL_RANK = args.local_rank
+    # config.LOCAL_RANK = args.local_rank
 
     # output folder
     config.OUTPUT = os.path.join(config.OUTPUT, config.MODEL.NAME, config.TAG)
@@ -305,5 +304,6 @@ def get_config(args):
     # This is for the "local variable" use pattern
     config = _C.clone()
     update_config(config, args)
+    update_ipu_config(config, args)
 
     return config
