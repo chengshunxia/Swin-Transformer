@@ -9,4 +9,4 @@ from .config import update_ipu_config
 
 from .optimizer import get_optimizer
 
-from .model import convert_to_ipu_model, ModelWithLoss
+from .model import convert_to_ipu_model, ModelWithLoss, pipeline_model

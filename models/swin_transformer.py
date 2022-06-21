@@ -233,7 +233,8 @@ class SwinTransformerBlock(nn.Module):
     def forward(self, x):
         H, W = self.input_resolution
         B, L, C = x.shape
-        assert L == H * W, "input feature has wrong size"
+        _msg = "input feature has wrong size L: %4d H: %4d W: %4d " % (L,H,W)
+        assert L == H * W, _msg
 
         shortcut = x
         x = self.norm1(x)
@@ -496,6 +497,7 @@ class SwinTransformer(nn.Module):
         self.patch_norm = patch_norm
         self.num_features = int(embed_dim * 2 ** (self.num_layers - 1))
         self.mlp_ratio = mlp_ratio
+        self.flatten = torch.flatten
 
         # split image into non-overlapping patches
         self.patch_embed = PatchEmbed(
@@ -567,7 +569,7 @@ class SwinTransformer(nn.Module):
 
         x = self.norm(x)  # B L C
         x = self.avgpool(x.transpose(1, 2))  # B C 1
-        x = torch.flatten(x, 1)
+        x = self.flatten(x, 1)
         return x
 
     def forward(self, x):

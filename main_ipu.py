@@ -30,7 +30,7 @@ from logger import create_logger
 from utils import load_checkpoint, load_pretrained, save_checkpoint, NativeScalerWithGradNormCount, auto_resume_helper, \
     reduce_tensor
 import datasets
-from ipu import create_training_options, create_validation_options, get_common_parser, get_optimizer, convert_to_ipu_model, ModelWithLoss
+from ipu import create_training_options, create_validation_options, get_common_parser, get_optimizer, convert_to_ipu_model, ModelWithLoss, pipeline_model
 
 
 def parse_option():
@@ -110,6 +110,7 @@ def main(config):
     #     criterion = LabelSmoothingCrossEntropy(smoothing=config.MODEL.LABEL_SMOOTHING)
     # else:
     criterion = torch.nn.CrossEntropyLoss()
+    train_model = pipeline_model(model)
     train_model = ModelWithLoss(model, criterion)
     train_model_ipu = convert_to_ipu_model(train_model, training_opts, optimizer, traininig = True)
     
