@@ -32,7 +32,7 @@ def get_optimizer(args, model):
     #     optimizer = RMSprop(params, lr=args.lr, alpha=args.rmsprop_decay, momentum=args.momentum, loss_scaling=args.initial_loss_scaling, eps=args.optimizer_eps, use_tf_variant=True)
     
     if args.TRAIN.OPTIMIZER.NAME == 'adamw':
-        ##TODO fix the loss_scaling
-        optimizer = AdamW(params, lr=args.TRAIN.BASE_LR, loss_scaling=1.0, eps=args.TRAIN.OPTIMIZER.EPS)
+        ##TODO fix the loss_scaling, hard code the loss scaling factor to 128
+        optimizer = AdamW(params, lr=args.TRAIN.BASE_LR, loss_scaling=128, eps=args.TRAIN.OPTIMIZER.EPS)
     
     return optimizer

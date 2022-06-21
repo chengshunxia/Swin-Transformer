@@ -22,3 +22,9 @@ class ModelWithLoss(torch.nn.Module):
         out = self.model(data)
         loss = self.loss(out, target)
         return out, loss
+
+
+def set_pipeline(model, config):
+    depths = config.MODEL.SWIN.DEPTHS
+    
+

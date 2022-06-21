@@ -93,7 +93,9 @@ def main(config):
     optimizer = get_optimizer(config, model)
     logger.info(f"Optimizer : {optimizer}")
    
-    loss_scaler = NativeScalerWithGradNormCount()
+    #loss_scaler = NativeScalerWithGradNormCount()
+    #TODO add loss scaling here
+    loss_scaler = 128
 
     if config.TRAIN.ACCUMULATION_STEPS > 1:
         lr_scheduler = build_scheduler(config, optimizer, len(train_data) // config.TRAIN.ACCUMULATION_STEPS)
@@ -160,7 +162,7 @@ def main(config):
         # max_accuracy = max(max_accuracy, acc1)
         # logger.info(f'Max accuracy: {max_accuracy:.2f}%')
 
-    total_time = time.time() -  fstart_time
+    total_time = time.time() -  start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     logger.info('Training time {}'.format(total_time_str))
 
@@ -193,7 +195,7 @@ def train_one_epoch(config, model, dataset, optimizer, epoch, lr_scheduler, loss
         if (idx + 1) % config.TRAIN.ACCUMULATION_STEPS == 0:
             optimizer.zero_grad()
             lr_scheduler.step_update((epoch * num_steps + idx) // config.TRAIN.ACCUMULATION_STEPS)
-        loss_scale_value = 4096
+        loss_scale_value = 128
 
         if config.IPU.replication_factor != 1:
             loss = torch.sum(loss)
@@ -290,7 +292,7 @@ if __name__ == '__main__':
     args, config = parse_option()
 
     # linear scale the learning rate according to total batch size, may not be optimal
-    world_size = os.getenv("OMPI_COMM_WORLD_RANK") or 1
+    world_size = int (os.getenv("OMPI_COMM_WORLD_SIZE") or 1)
     linear_scaled_lr = config.TRAIN.BASE_LR * config.DATA.BATCH_SIZE * world_size / 512.0
     linear_scaled_warmup_lr = config.TRAIN.WARMUP_LR * config.DATA.BATCH_SIZE * world_size / 512.0
     linear_scaled_min_lr = config.TRAIN.MIN_LR * config.DATA.BATCH_SIZE * world_size / 512.0

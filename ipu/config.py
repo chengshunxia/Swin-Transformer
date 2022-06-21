@@ -3,22 +3,23 @@ import os
 import yaml
 import popdist
 import multiprocessing
+import horovod.torch as hvd
 from yacs.config import CfgNode as CN
 
 
 def handle_distributed_settings(_config):
     # Initialise popdist
     if popdist.isPopdistEnvSet():
-        init_popdist(args)
+        init_popdist(_config)
     else:
         _config.IPU.use_popdist = False
 
 def init_popdist(_config):
     hvd.init()
-    config.IPU.use_popdist = True
-    if popdist.getNumTotalReplicas() != args.replicas:
-        logging.warn(f"The number of replicas is overridden by poprun. The new value is {popdist.getNumTotalReplicas()}.")
-    _config.IPU.replicas = int(popdist.getNumLocalReplicas())
+    _config.IPU.use_popdist = True
+    if popdist.getNumTotalReplicas() != _config.IPU.replication_factor:
+        print (f"The number of replicas is overridden by poprun. The new value is {popdist.getNumLocalReplicas()}.")
+    _config.IPU.replicationFactor = int(popdist.getNumLocalReplicas())
     _config.IPU.popdist_rank = popdist.getInstanceIndex()
     _config.IPU.popdist_size = popdist.getNumInstances()
     _config.IPU.popdist_local_rank = hvd.local_rank()

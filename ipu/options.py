@@ -21,6 +21,7 @@ import popdist.poptorch
 import numpy as np
 import ctypes
 import os
+import horovod.torch as hvd
 
 
 def generate_random_seed(distributed=False):
