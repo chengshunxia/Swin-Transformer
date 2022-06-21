@@ -310,7 +310,7 @@ if __name__ == '__main__':
 
     os.makedirs(config.OUTPUT, exist_ok=True)
     logger = create_logger(output_dir=config.OUTPUT,
-                           dist_rank= os.getenv("OMPI_COMM_WORLD_RANK") or 0, 
+                           dist_rank=int(os.getenv("OMPI_COMM_WORLD_RANK") or 0),
                            name=f"{config.MODEL.NAME}")
 
     if not os.getenv("OMPI_COMM_WORLD_RANK") or os.getenv("OMPI_COMM_WORLD_RANK") == 0:
