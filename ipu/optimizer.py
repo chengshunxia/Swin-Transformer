@@ -33,6 +33,6 @@ def get_optimizer(args, model):
     
     if args.TRAIN.OPTIMIZER.NAME == 'adamw':
         ##TODO fix the loss_scaling
-        optimizer = AdamW(params, lr=args.TRAIN.BASE_LR, loss_scaling=65536, eps=args.TRAIN.OPTIMIZER.EPS)
+        optimizer = AdamW(params, lr=args.TRAIN.BASE_LR, loss_scaling=1.0, eps=args.TRAIN.OPTIMIZER.EPS)
     
     return optimizer

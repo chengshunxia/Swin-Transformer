@@ -74,7 +74,7 @@ def create_training_options(config):
     # using accum_type=torch.float16 during optimizer instatiation.
     if config.IPU.auto_loss_scaling is True:
         opts.Training.setAutomaticLossScaling(True)
-
+    
     # For efficiency return the sum of the outputs from IPU to host
     opts.outputMode(poptorch.OutputMode.Sum)
 
@@ -143,6 +143,8 @@ def create_training_options(config):
     engine_options = {
         "opt.useAutoloader": "true",
         "target.syncReplicasIndependently": "true",
+        "debug.nanOverflowMode":"true",
+        "debug.floatPointOpException":"true"
     }
     if config.IPU.profile_dir:
         engine_options = {

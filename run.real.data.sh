@@ -4,4 +4,7 @@ python main_ipu.py 	\
 	--batch-size 4					     \
 	--run-ipu					     \
        	--data-path /localdata/cn-customer-engineering/zhiweit/ai-datasets/datasets/imagenet/raw/imagenet-raw-data/  \
-	--data imagenet
+	--executable-cache-dir ./cache	\
+	--data imagenet			\
+	--accumulation-steps 128	\
+	--replication-factor 16

@@ -6,7 +6,7 @@ def convert_to_ipu_model(model, opts, optimizer=None, traininig=True):
         _model = poptorch.trainingModel(model, opts, optimizer=optimizer)
         return _model
     else:
-        _model = poptorch.trainingModel(model, opts)
+        _model = poptorch.inferenceModel(model, opts)
         return _model
 
 
