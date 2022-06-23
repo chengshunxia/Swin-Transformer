@@ -93,9 +93,9 @@ def main(config):
     optimizer = get_optimizer(config, model)
     logger.info(f"Optimizer : {optimizer}")
    
-    #loss_scaler = NativeScalerWithGradNormCount()
+    loss_scaler = NativeScalerWithGradNormCount()
     #TODO add loss scaling here
-    loss_scaler = 128
+    #loss_scaler = 128
 
     if config.TRAIN.ACCUMULATION_STEPS > 1:
         lr_scheduler = build_scheduler(config, optimizer, len(train_data) // config.TRAIN.ACCUMULATION_STEPS)
