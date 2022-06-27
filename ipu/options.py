@@ -92,12 +92,27 @@ def create_training_options(config):
     #  with optimizer state residing either on-chip or in DRAM
     opts.TensorLocations.setOptimizerLocation(
         poptorch.TensorLocationSettings()
-        # Optimizer state lives on- or off-chip
         .useOnChipStorage(not config.IPU.optimizer_state_offchip)
-        # Shard optimizer state between replicas with zero-redundancy
         .useReplicatedTensorSharding(config.IPU.replicated_tensor_sharding))
 
-    # Use Pipelined Execution
+    opts.TensorLocations.setAccumulatorLocation(
+        poptorch.TensorLocationSettings()
+        .useOnChipStorage(False))
+
+
+    # opts.TensorLocations.setActivationLocation(
+    #     poptorch.TensorLocationSettings().minElementsForOffChip(
+    #         4).useOnChipStorage(True))
+    # opts.TensorLocations.setWeightLocation(
+    #     poptorch.TensorLocationSettings().useIOTilesToStore(
+    #         True).useReplicatedTensorSharding(False))
+    # opts.TensorLocations.setOptimizerLocation(
+    #     poptorch.TensorLocationSettings().useIOTilesToLoad(
+    #         False).useReplicatedTensorSharding(
+    #             True).minElementsForReplicatedTensorSharding(4))
+    # opts.TensorLocations.setAccumulatorLocation(
+    #     poptorch.TensorLocationSettings().useOnChipStorage(False))
+
     opts.setExecutionStrategy(
         poptorch.PipelinedExecution(poptorch.AutoStage.AutoIncrement))
 
@@ -111,7 +126,19 @@ def create_training_options(config):
     #     f'IPU{i}': config.IPU.matmul_proportion[i]
     #     for i in range( config.IPU.ipus_per_replica )
     # }
-    # opts.setAvailableMemoryProportion(mem_prop)
+    
+    mem_prop = {
+        "IPU0": 0.20,
+        "IPU1": 0.15,
+        "IPU2": 0.20,
+        "IPU3": 0.20,
+        "IPU4": 0.20,
+        "IPU5": 0.20,
+        "IPU6": 0.05,
+        "IPU7": 0.05
+    }
+
+    opts.setAvailableMemoryProportion(mem_prop)
 
     # Enable caching the compiled executable to disk
     if config.IPU.executable_cache_dir:
@@ -139,6 +166,7 @@ def create_training_options(config):
     opts._Popart.set("subgraphCopyingStrategy", int(popart.SubgraphCopyingStrategy.JustInTime))
     opts._Popart.set("scheduleNonWeightUpdateGradientConsumersEarly", True)
     opts._Popart.setPatterns({"TiedGather": True, "TiedGatherAccumulate": True, "UpdateInplacePrioritiesForIpu": True})
+    opts._Popart.set("enableOutlining", True)
 
     # Options for profiling with Popvision
     engine_options = {

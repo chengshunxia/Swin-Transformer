@@ -64,7 +64,7 @@ def get_common_parser():
                         help="Enable half partials for matmuls and convolutions globally")
     ipu_arg_group.add_argument("--optimizer-state-offchip", type=str_to_bool, nargs="?", const=True, default=True,
                         help="Set the tensor storage location for optimizer state to be offchip.")
-    ipu_arg_group.add_argument("--replicated-tensor-sharding", type=str_to_bool, nargs="?", const=True, default=False,
+    ipu_arg_group.add_argument("--replicated-tensor-sharding", type=str_to_bool, nargs="?", const=True, default=True,
                         help="Enable replicated tensor sharding of optimizer state")
     ipu_arg_group.add_argument("--ipus-per-replica", type=int, help="Number of IPUs required by each replica")
     ipu_arg_group.add_argument("--matmul-proportion", type=float, nargs="+", help="Relative IPU memory proportion size allocated for matmul")

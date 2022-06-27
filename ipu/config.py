@@ -32,12 +32,12 @@ def set_ipu_default_config(config):
     config.IPU.eight_bit_io = True
     config.IPU.dataloader_worker = min(32, multiprocessing.cpu_count())
     config.IPU.profile = False
-    config.IPU.profile_dir = ""
+    config.IPU.profile_dir = None
     config.IPU.num_io_tiles = 0
     config.IPU.device_iterations = 1
     config.IPU.replication_factor = 1
     config.IPU.enable_half_partials = True
-    config.IPU.optimizer_state_offchip = False
+    config.IPU.optimizer_state_offchip = True
     config.IPU.replicated_tensor_sharding = True
     config.IPU.ipus_per_replica = 1
     config.IPU.matmul_proportion = 0.6
@@ -57,6 +57,8 @@ def update_ipu_config(config, args):
     config.IPU = CN()
 
     set_ipu_default_config(config)
+    import pdb
+    pdb.set_trace()
 
     if args.dataloader_rebatch_size != None:
         config.IPU.dataloader_rebatch_size = args.dataloader_rebatch_size
