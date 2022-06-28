@@ -95,9 +95,9 @@ def create_training_options(config):
         .useOnChipStorage(not config.IPU.optimizer_state_offchip)
         .useReplicatedTensorSharding(config.IPU.replicated_tensor_sharding))
 
-    opts.TensorLocations.setAccumulatorLocation(
-        poptorch.TensorLocationSettings()
-        .useOnChipStorage(False))
+    #opts.TensorLocations.setAccumulatorLocation(
+    #    poptorch.TensorLocationSettings()
+    #    .useOnChipStorage(False))
 
 
     # opts.TensorLocations.setActivationLocation(
