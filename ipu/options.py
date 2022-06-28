@@ -128,11 +128,11 @@ def create_training_options(config):
     # }
     
     mem_prop = {
-        "IPU0": 0.20,
-        "IPU1": 0.15,
-        "IPU2": 0.20,
-        "IPU3": 0.20,
-        "IPU4": 0.20,
+        "IPU0": 0.60,
+        "IPU1": 0.05,
+        "IPU2": 0.60,
+        "IPU3": 0.60,
+        "IPU4": 0.60,
         "IPU5": 0.20,
         "IPU6": 0.05,
         "IPU7": 0.05
