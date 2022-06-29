@@ -63,8 +63,8 @@ def pipeline_model(model):
     poptorch.BeginBlock(model.layers[0].downsample, ipu_id = 0)
 
     poptorch.BeginBlock(model.layers[1].blocks[0], ipu_id = 0)
-    poptorch.BeginBlock(model.layers[1].blocks[1], ipu_id = 1)
-    poptorch.BeginBlock(model.layers[1].downsample, ipu_id = 1)
+    poptorch.BeginBlock(model.layers[1].blocks[1], ipu_id = 0)
+    poptorch.BeginBlock(model.layers[1].downsample, ipu_id = 0)
     poptorch.BeginBlock(model.layers[2].blocks[0], ipu_id = 1)
     poptorch.BeginBlock(model.layers[2].blocks[1], ipu_id = 1)
 
